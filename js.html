@@ -1,0 +1,50 @@
+<!-- Llamado y extraccion resultados del table-->
+    <script>
+
+        function buscarResultados (){
+          const numeroCodigo = document.getElementById ("text-box-numeroCodigoAprendiz").value; // Id del input donde se buscaran los resultados.
+          let infoCodigoAprendiz = document.getElementById("numeroCodigoAprendiz");// Id input que Muestra resultado del Codigo del aprendiz
+          let infoNombre = document. getElementById("Nombre"); // Id de input que Muestra el nombre del aprendiz
+
+
+          google.script.run
+          .withSuccessHandler( info =>{
+            let tableBody = document.getElementById("aprendizTableBody"); // referencia del Tbody 
+            tableBody.innerHTML = "";
+            if ( info.length > 0 ){
+              infoCodigoAprendiz.value = info[0][3];
+              infoNombre.value = info[0][2];
+
+
+              info.forEach( aprendiz => {
+                const template = document.getElementById("aprendicesRow"); // referencia del Id del template.  
+                const templateRow = template.content;
+
+
+                let tr = templateRow.cloneNode(true); // funcion que clona los valores solicitados del th
+               
+                let colArea = tr.querySelector(".aprendizArea");                
+                let colInstitucion = tr.querySelector (".aprendizInstitucion")
+                let colEspecialidad = tr.querySelector (".aprendizEspecialidad")
+                let colFechadeInicio = tr.querySelector (".aprendizFechadeInicio")
+                let colFechaFinalizacion = tr.querySelector (".aprendizFechaFinalizacion")
+
+
+                // Se realiza la extraccion de los valores definidos de la hoja Resultados.
+                colArea.textContent = aprendiz[4];               
+                colInstitucion.textContent = aprendiz[5];
+                colEspecialidad.textContent = aprendiz[6];
+                colFechadeInicio.textContent = aprendiz[7];
+                colFechaFinalizacion.textContent = aprendiz[8];
+
+                tableBody.appendChild(tr)
+              })
+
+              }else {
+                alert("No se encontraron Registros.")
+              }
+            })
+          .buscarAprendiz(numeroCodigo);
+         }
+
+    </script>
